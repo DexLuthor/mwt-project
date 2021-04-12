@@ -55,10 +55,21 @@ export class FilmsListComponent implements OnInit, AfterViewInit {
   }
 
   onFilmModified(film: any): void {
+    const changeState = () => {
+      if (this.addingProcess) {
+        this.addingProcess = false;
+        this.add = true;
+      }
+    };
+
     this.filmsServerService.saveFilm(film)
       .subscribe(
-        a => {
+        _ => {
           this.snackBar.successMessage(this.addingProcess ? 'Successfully created' : 'Successfully updated');
+          changeState();
+          setTimeout(() => {
+            window.location.reload();
+          }, 150);
         },
         error => {
           if (error.error.status === 403) {
@@ -66,13 +77,11 @@ export class FilmsListComponent implements OnInit, AfterViewInit {
           } else {
             this.snackBar.errorMessage('Unknown Error');
           }
+          changeState();
         }
       );
-    if (this.addingProcess) {
-      this.addingProcess = false;
-      this.add = true;
-    }
-    window.location.reload();
+
+
   }
 
 }
