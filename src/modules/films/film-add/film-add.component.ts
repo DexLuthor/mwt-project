@@ -1,16 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Film} from '../../../entities/film';
 
 @Component({
-  selector: 'app-film-edit',
-  templateUrl: './film-edit.component.html',
-  styleUrls: ['./film-edit.component.css']
+  selector: 'app-film-add',
+  templateUrl: './film-add.component.html',
+  styleUrls: ['./film-add.component.css']
 })
-export class FilmEditComponent implements OnChanges {
-  @Input() film: any;
-  @Output() filmModified: EventEmitter<Film> = new EventEmitter<Film>();
+export class FilmAddComponent implements OnInit {
 
+  @Output() filmSaved = new EventEmitter<any>();
   filmEditForm = new FormGroup({
     filmName: new FormControl('', [Validators.required, Validators.minLength(2)]),
     year: new FormControl('', [
@@ -25,7 +23,6 @@ export class FilmEditComponent implements OnChanges {
     ])
   });
 
-
   get filmName(): FormControl {
     return this.filmEditForm.get('filmName') as FormControl;
   }
@@ -38,24 +35,18 @@ export class FilmEditComponent implements OnChanges {
     return this.filmEditForm.get('slovakName') as FormControl;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.film) {
-      this.filmName.setValue(this.film.nazov);
-      this.year.setValue(this.film.rok);
-      this.slovakName.setValue(this.film.slovenskyNazov);
-      console.log('Input:', this.film);
-    }
+  ngOnInit(): void {
   }
 
   onSubmit(): void {
-    const film: Film = {
-      ...this.film,
+    const film = {
       nazov: this.filmName.value,
       slovenskyNazov: this.slovakName.value,
-      rok: this.year.value
+      rok: this.year.value,
+      reziser: [],
+      postava: []
     };
 
-    this.filmModified.emit(film);
+    this.filmSaved.emit(film);
   }
-
 }

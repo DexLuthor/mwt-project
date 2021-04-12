@@ -1,0 +1,64 @@
+<mat-card class="block">
+  <form class="example-form" [formGroup]="filmEditForm" (ngSubmit)="onSubmit()">
+    <h3 style="color: darkgray">Movie information</h3>
+    <!--  Name  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name" formControlName="filmName">
+      </mat-form-field>
+    </div>
+    <!--  Year  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Year" type="number" formControlName="year">
+      </mat-form-field>
+    </div>
+    <!--  Slovak name  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Slovak name" formControlName="slovakName">
+      </mat-form-field>
+    </div>
+    <br><br>
+
+    <!--  Directors  -->
+<!--    <h3 style="color: darkgray">Director information</h3>-->
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Name</mat-label>-->
+<!--      <input matInput type="text">-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Surname</mat-label>-->
+<!--      <input matInput type="text">-->
+<!--    </mat-form-field>-->
+<!--    <br><br>-->
+
+<!--    &lt;!&ndash;  Actors  &ndash;&gt;-->
+<!--    <h3 style="color: darkgray">Actors information</h3>-->
+
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Character</mat-label>-->
+<!--      <input matInput type="text">-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Importance</mat-label>-->
+<!--      <mat-select [formControl]="colorControl">-->
+<!--        <mat-option value="primary">Primary</mat-option>-->
+<!--        <mat-option value="accent">Secondary</mat-option>-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Surname</mat-label>-->
+<!--      <input matInput type="text">-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>Name</mat-label>-->
+<!--      <input matInput type="text">-->
+<!--    </mat-form-field>-->
+
+<!--    <br><br>-->
+    <button [disabled]="filmEditForm?.invalid" mat-raised-button type="submit" value="submit"
+            style="background: #44bd32;color: white">Save
+    </button>
+  </form>
+</mat-card>

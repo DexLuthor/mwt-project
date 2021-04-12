@@ -1,1 +1,74 @@
-<p>film.ts-edit works!</p>
+<mat-card class="block">
+  <form class="example-form" [formGroup]="filmEditForm" (ngSubmit)="onSubmit()">
+    <h3 style="color: darkgray">Movie information</h3>
+    <!--  Name  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name" formControlName="filmName" [value]="film.nazov">
+      </mat-form-field>
+    </div>
+    <!--  Year  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Year" type="number" formControlName="year" [value]="film.rok">
+      </mat-form-field>
+    </div>
+    <!--  Slovak name  -->
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Slovak name" formControlName="slovakName" [value]="film.slovenskyNazov">
+      </mat-form-field>
+    </div>
+    <br><br>
+
+    <!--  Directors  -->
+    <h3 style="color: darkgray">Director information</h3>
+    <mat-accordion >
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Directors list</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <div *ngFor="let director of film.reziser">
+            <mat-card>
+              <app-postava [postava]="director"></app-postava>
+            </mat-card>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br><br>
+
+    <!--  Actors  -->
+    <h3 style="color: darkgray">Actors information</h3>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Actors list</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div *ngFor="let actor of film.postava">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>{{actor.postava}}</mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <p>{{actor.postava}}</p>
+
+              <p>Importance: {{actor.dolezitost === 'hlavná postava'
+                ? "Primary Role"
+                : "Secondary Role"}}
+              </p>
+              <app-postava [postava]="actor.herec"></app-postava>
+              <br><br>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br><br>
+    <button [disabled]="filmEditForm?.invalid" mat-raised-button type="submit" value="submit" style="background: #44bd32;color: white">Save</button>
+  </form>
+</mat-card>

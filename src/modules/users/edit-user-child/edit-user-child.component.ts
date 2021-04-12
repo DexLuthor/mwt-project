@@ -1,17 +1,11 @@
-import {Component, Input, OnChanges, Output, SimpleChanges, EventEmitter} from '@angular/core';
-import {User} from "../../../entities/user";
-import {
-  AsyncValidatorFn, FormArray,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators
-} from "@angular/forms";
-import {UserServerService} from "../../../services/user-server.service";
-import {Router} from "@angular/router";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {Group} from "../../../entities/group";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {User} from '../../../entities/user';
+import {AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {UserServerService} from '../../../services/user-server.service';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Group} from '../../../entities/group';
 
 @Component({
   selector: 'app-edit-user-child',
@@ -22,41 +16,23 @@ export class EditUserChildComponent implements OnChanges {
   @Input() user: User;
   @Output() changed = new EventEmitter<User>();
 
-  hide = true
-  private groups: Group[];
+  hide = true;
   userEditForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)],
       this.serverConflictValidator('name')),
 
     email: new FormControl('', [Validators.required, Validators.email,
-        Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")],
+        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
       this.serverConflictValidator('email')),
 
-    password: new FormControl('',),
+    password: new FormControl(''),
     password2: new FormControl(''),
     active: new FormControl(true),
     groups: new FormArray([])
-  }, this.passwordsMatchValidator)
+  }, this.passwordsMatchValidator);
+  private groups: Group[];
 
   constructor(private userServerService: UserServerService, private router: Router) {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.user) {
-      this.name.setValue(this.user.name)
-      this.email.setValue(this.user.email)
-      this.active.setValue(this.user.active)
-      this.userServerService.getGroups().subscribe(groups => {
-        this.groups = groups
-        groups.forEach(group => {
-          if (this.user.groups.some(ug => ug.id === group.id)) {
-            this.groupsCB.push(new FormControl(true))
-          } else {
-            this.groupsCB.push(new FormControl(false))
-          }
-        })
-      })
-    }
   }
 
   get name() {
@@ -83,6 +59,24 @@ export class EditUserChildComponent implements OnChanges {
     return this.userEditForm.get('groups') as FormArray;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.user) {
+      this.name.setValue(this.user.name);
+      this.email.setValue(this.user.email);
+      this.active.setValue(this.user.active);
+      this.userServerService.getGroups().subscribe(groups => {
+        this.groups = groups;
+        groups.forEach(group => {
+          if (this.user.groups.some(ug => ug.id === group.id)) {
+            this.groupsCB.push(new FormControl(true));
+          } else {
+            this.groupsCB.push(new FormControl(false));
+          }
+        });
+      });
+    }
+  }
+
   passwordsMatchValidator(control: FormGroup): ValidationErrors {
     const password = control.get('password');
     const password2 = control.get('password2');
@@ -97,16 +91,16 @@ export class EditUserChildComponent implements OnChanges {
 
   serverConflictValidator(conflictFieldName: string): AsyncValidatorFn {
     return (control: FormControl): Observable<ValidationErrors> => {
-      const username = conflictFieldName === 'name' ? control.value : ''
-      const email = conflictFieldName === 'email' ? control.value : ''
-      const user = new User(username, email, this.user.id)
+      const username = conflictFieldName === 'name' ? control.value : '';
+      const email = conflictFieldName === 'email' ? control.value : '';
+      const user = new User(username, email, this.user.id);
       return this.userServerService.userConflicts(user).pipe(
         map(conflictArray => {
           return conflictArray.includes(conflictFieldName) ?
-            {conflictField: conflictFieldName + ' has been on the server'} : null
+            {conflictField: conflictFieldName + ' has been on the server'} : null;
         })
-      )
-    }
+      );
+    };
   }
 
   onSubmit() {

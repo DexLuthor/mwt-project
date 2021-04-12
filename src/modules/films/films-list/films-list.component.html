@@ -37,10 +37,21 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let film columns: columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let film columns: columnsToDisplay"
+      (click)="onRowClick(film)" [ngClass]="{'selected': film === chosenFilm}"></tr>
 </table>
 
 <mat-paginator length="10" pageSize="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
 </mat-paginator>
 
+<div *ngIf="add; else edit">
+  <button mat-raised-button style="background: #fbc531" (click)="addingProcess = true">
+    <mat-icon aria-hidden="false" aria-label="add a film">add</mat-icon>
+    Add new film
+  </button>
+  <app-film-add *ngIf="addingProcess" (filmSaved)="onFilmModified($event)"></app-film-add>
+</div>
+<ng-template #edit>
+  <app-film-edit *ngIf="chosenFilm" [film]="chosenFilm" (filmModified)="onFilmModified($event)"></app-film-edit>
+</ng-template>
 <router-outlet></router-outlet>

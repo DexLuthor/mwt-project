@@ -26,3 +26,7 @@ tr.example-element-row:not(.example-expanded-row):active {
   overflow: hidden;
   /* display: flex; */
 }
+
+.selected {
+  background-color: #74b9ff;
+}
